@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: Patients API
+  description: This is the Patients API. It provides RESTful operations for Patients
+    data.
+  contact:
+    name: Katrina Merca
+    email: merca3@inbox.lv
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/api/v1
+  description: Localhost
+paths:
+  /patients:
+    get:
+      summary: Returns data about all patients
+      description: This operation provides a view of the patients data in JSON
+      operationId: getPatients
+      responses:
+        "200":
+          description: List of all patients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Patient"
+                x-content-type: application/json
+        "500":
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-swagger-router-controller: Default
+    post:
+      summary: Add a patient
+      description: Add a patient to the system
+      operationId: addPatient
+      requestBody:
+        description: Patient to add
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Patient"
+        required: true
+      responses:
+        "201":
+          description: Patient added
+        "400":
+          description: "Invalid input, object invalid"
+        "409":
+          description: Patient already exists
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-swagger-router-controller: Default
+  /patients/{patient_id}:
+    get:
+      summary: Returns specific patient data
+      description: This operation provides a patient data in JSON
+      operationId: getPatient
+      parameters:
+      - name: patient_id
+        in: path
+        description: ID of patient to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Patient"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Patient not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-swagger-router-controller: Default
+    put:
+      summary: Update specific patient data
+      description: This operation updates a patient data in JSON
+      operationId: updatePatient
+      parameters:
+      - name: patient_id
+        in: path
+        description: ID of patient to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Bad request
+        "404":
+          description: Patient not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-swagger-router-controller: Default
+    delete:
+      summary: Delete specific patient data
+      description: This operation deletes a patient data
+      operationId: deletePatient
+      parameters:
+      - name: patient_id
+        in: path
+        description: ID of patient to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Patient deleted
+        "400":
+          description: Bad request
+        "404":
+          description: Patient not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    Patient:
+      required:
+      - date_of_birth
+      - id
+      - patient_id
+      - patient_name
+      - visit_date
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 621c7f80-cefb-47d5-b2b4-01f7c3f25b99
+        patient_id:
+          type: string
+          example: P1002
+        patient_name:
+          type: string
+          example: Jane Smith
+        gender:
+          type: string
+          example: Female
+        date_of_birth:
+          type: string
+          format: date
+          example: 1990-09-28
+        visit_date:
+          type: string
+          format: date
+          example: 2023-01-05
+        symptoms:
+          type: string
+          example: Cough and Sore Throat
+        diagnosis:
+          type: string
+          example: Bronchitis
+        medication:
+          type: string
+          example: Amoxicillin
+        dosage:
+          type: string
+          example: 500mg
+      example:
+        symptoms: Cough and Sore Throat
+        dosage: 500mg
+        gender: Female
+        patient_id: P1002
+        date_of_birth: 1990-09-28T00:00:00.000+00:00
+        patient_name: Jane Smith
+        diagnosis: Bronchitis
+        medication: Amoxicillin
+        id: 621c7f80-cefb-47d5-b2b4-01f7c3f25b99
+        visit_date: 2023-01-05T00:00:00.000+00:00
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
