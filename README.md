@@ -7,3 +7,8 @@
 
 1. Start the project by running `npm run dev`.
 2. Open your browser and navigate to `http://localhost:3000`.
+3. Navigate to `/api/v1/patients` to interact with the API.
+
+## Swagger documentation
+
+1. Navigate to `http://localhost:3000/docs` to check and interact with API documentation.
