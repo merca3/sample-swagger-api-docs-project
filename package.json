@@ -12,6 +12,8 @@
   "description": "",
   "dependencies": {
     "express": "^4.19.2",
+    "js-yaml": "^4.1.1",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^10.0.0"
   }
 }
